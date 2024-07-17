@@ -33,7 +33,7 @@ This API fetches the TIN (Taxpayer Identification Number) Details.
    
 3. Install the dependencies:
    ```bash
-   pip install flask requests uuid base64 bs4 re html
+   pip install flask requests uuid base64 bs4 html
 
 4. Run the Application:
    ```bash

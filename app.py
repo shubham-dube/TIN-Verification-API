@@ -3,7 +3,6 @@ import requests
 import uuid
 import base64
 from bs4 import BeautifulSoup
-import re
 import html
 
 app = Flask(__name__)
