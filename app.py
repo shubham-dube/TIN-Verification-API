@@ -4,16 +4,17 @@ import uuid
 import base64
 from bs4 import BeautifulSoup
 import html
+from asgiref.wsgi import WsgiToAsgi
 
 app = Flask(__name__)
+asgi_app = WsgiToAsgi(app)
 
-captcha = "https://www.tinxsys.com/TinxsysInternetWeb/images/simpleCaptcha.jpg"
-
-sessions = {}
+tinSessions = {}
 
 @app.route("/api/v1/getCaptcha", methods=["GET"])
 def getCaptcha():
     try:
+        captcha = "https://www.tinxsys.com/TinxsysInternetWeb/images/simpleCaptcha.jpg"
         session = requests.Session()
         id = str(uuid.uuid4())
 
@@ -32,7 +33,7 @@ def getCaptcha():
 
         # #
 
-        sessions[id] = {
+        tinSessions[id] = {
             "session": session
         }
 
@@ -55,7 +56,7 @@ def getTINdetails():
         TIN = request.json.get("TIN")
         captcha = request.json.get("captcha")
 
-        user = sessions.get(sessionId)
+        user = tinSessions.get(sessionId)
 
         session = user['session']
         if session is None:
@@ -116,4 +117,5 @@ def getTINdetails():
 
 
 if __name__ == "__main__":
-    app.run()
+    import uvicorn
+    uvicorn.run(asgi_app, host='0.0.0.0', port=5001)
